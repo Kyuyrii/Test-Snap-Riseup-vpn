@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=RiseupVPN
+Comment=Easy VPN by riseup
+Comment[es]=VPN Facil de riseup
+Comment[de]=Easy VPN by riseup
+Exec=${SNAP}/usr/bin/riseup-vpn %U
+Terminal=false
+Icon=${SNAP}/usr/gui/riseup-vpn.png
+Categories=Network;Application;
+StartupNotify=true
+X-AppInstall-Package=riseup-vpn
+Keywords=encryption;vpn;riseup;leap

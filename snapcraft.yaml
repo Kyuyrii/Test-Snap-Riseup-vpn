@@ -1,0 +1,82 @@
+name: riseup-vpn
+base: core24
+version: 0.24.10
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+summary: RiseupVPN, secure VPN. Powered by Bitmask.
+description: |
+  RiseupVPN is an easy, fast, and secure VPN service from riseup.net.
+  RiseupVPN does not require a user account, keep logs, or track you in
+  any way. The service is paid for entirely by donations from users like you.
+grade: stable
+confinement: classic
+compression: lzo
+
+apps:
+  riseup-vpn:
+    command: usr/bin/riseup-vpn
+    desktop: usr/gui/riseup-vpn.desktop
+  bitmask-root:
+    command: usr/sbin/bitmask-root
+  openvpn:
+    command: usr/sbin/openvpn
+
+package-repositories:
+  - type: apt
+    url: http://ppa.launchpadcontent.net/leapcodes/riseup-vpn/ubuntu/
+    suites: [noble]
+    components: [main]
+    architectures: [amd64]
+    key-id: DBC212BFA2349A26AA7CA17FF4F9F002F64469DC
+
+parts:
+  riseup-vpn:
+    plugin: nil
+    stage-packages: [riseup-vpn]
+    prime:
+      - usr/bin/riseup-vpn
+      - usr/sbin/bitmask-root
+      - usr/share/doc/riseup-vpn/
+      - usr/share/gocode/src/0xacab.org/leap/bitmask-vpn/
+      - usr/share/polkit-1/actions/se.leap.bitmask.policy
+
+  dependencies:
+    after: [riseup-vpn]
+    plugin: nil
+    stage-packages:
+      - libc6
+      - libgcc-s1
+      - libqt6core6t64
+      - libqt6gui6t64
+      - libqt6qml6
+      - libqt6widgets6t64
+      - libstdc++6
+      - libqt6core6
+      - libqt6gui6
+      - libqt6widgets6
+      - libqt6svg6
+      - qml6-module-qtquick
+      - qml6-module-qtquick-controls
+      - qml6-module-qtquick-dialogs
+      - qml6-module-qtquick-layouts
+      - qml6-module-qtqml-workerscript
+      - qml6-module-qtquick-templates
+      - qml6-module-qt-labs-settings
+      - qml6-module-qtquick-window
+      - qml6-module-qt-labs-platform
+      - qml6-module-qtcore
+      - qml6-module-qt5compat-graphicaleffects
+      - openvpn
+      - policykit-1-gnome
+      - python3
+      - iptables
+
+  gui-launcher:
+    after: [dependencies]
+    plugin: nil
+    source: ./launcher
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr
+      cp -r gui $CRAFT_PART_INSTALL/usr/
